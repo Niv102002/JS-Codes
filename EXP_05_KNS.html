@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown timer</title>
+</head>
+<body>
+    <h1>Countdown Timer</h1>
+    <p>Enter a valid end date and time:</p>
+    <input type="text" id="endDateInput" placeholder="YYYY-MM-DD HH:MM:SS">
+    <button onclick="startCountdown()">Start Countdown</button>
+    <button onclick="reset()">Reset Countdown</button>
+    <p id="countdown"></p>
+
+    <script>
+       let countdownInterval;
+
+        function startCountdown() 
+        {
+            clearInterval(countdownInterval); // Clear any previous countdown interval
+            const endDateStr = document.getElementById("endDateInput").value;
+            const endDate = new Date(endDateStr);
+    
+            if (isNaN(endDate)) 
+            {
+                alert("Invalid date format. Please use YYYY-MM-DD HH:MM:SS");
+                return;
+             }
+
+            const countdownElement = document.getElementById("countdown");
+
+            function updateCountdown() 
+            {
+                const currentDate = new Date();
+                const timeRemaining = endDate - currentDate;
+        
+                if (timeRemaining <= 0) 
+                {
+                    countdownElement.innerHTML = "Expired";
+                } 
+                else
+                {
+                    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                    countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                 }   
+            }
+            updateCountdown();
+            countdownInterval = setInterval(updateCountdown, 1000);
+        }
+
+        function reset() 
+        {
+            clearInterval(countdownInterval); 
+            document.getElementById('countdown').innerHTML = ''; 
+            document.getElementbyId('endDateInput').value = '';
+        }
+    
+    </script>
+</body>
+</html>
+
+        
+   
