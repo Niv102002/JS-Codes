@@ -1,0 +1,108 @@
+--> ALU MVM
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.all;
+use IEEE.NUMERIC_STD.ALL;
+
+entity ALU4 is
+	Port (A : in STD_LOGIC_VECTOR (3 downto 0);
+	      B : in STD_LOGIC_VECTOR (3 downto 0);
+	      F : in STD_LOGIC_VECTOR (2 downto 0);
+	      Y : out STD_LOGIC_VECTOR (3 downto 0);
+	      CARRY_SIGN : out STD_LOGIC );
+end ALU4;
+
+architecture ALU4_arch of ALU4 is 
+	signal result: STD_LOGIC_VECTOR(4 down to 0):= (OTHER=> '0'); 
+--- defines a 5 bit signal called result and sets all its elements to 0
+
+	begin 
+		process(A,B,F)
+		begin
+			case F is
+
+
+			-- 6 LOGICAL OPERATIONS, F ="000" to F ="101"
+				when "000" =>
+					result<= '0' & (A AND B);
+				when "001" =>
+					result<= '0' & (A NAND B);
+				when "010" =>
+					result<= '0' & (A OR B);
+				when "011" =>
+					result<= '0' & (A NOR B);
+				when "100" =>
+					result<= '0' & (A XOR B);
+				when "101" =>
+					result<= '0' & (A XNOR B);
+	
+			--- Addition, F= "110"
+				when "110" =>
+					result<= ('0' & A)+('0' & B) ;
+
+			--- Subtraction, F="others"
+				when others =>
+					IF A< B THEN
+						result<= (NOT(('0' & A) + ('0' &(NOT B)) + 1))+1;
+
+					ELSE 
+						result <= ('0' & A)-('0' & B);
+					END IF;
+
+			end case;
+		end process;
+		
+			Y <= result(3 downto 0);
+			CARRY_SIGN <= result(4);
+
+end ALU4_arch;
+
+
+
+-------------------------------------------------------------ALU TVM------------------------------------------------------------------------------------------------------------------------
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.all;
+
+entity ALU4_TB is
+end ALU_TB;
+
+architecture behaviour of ALU4_TB is
+
+	component ALU4
+	Port (A : in STD_LOGIC_VECTOR (3 downto 0);
+	      B : in STD_LOGIC_VECTOR (3 downto 0);
+	      F : in STD_LOGIC_VECTOR (2 downto 0);
+	      Y : out STD_LOGIC_VECTOR (3 downto 0);
+	      CARRY_SIGN : out STD_LOGIC );
+	end component;
+
+	--INPUTS
+	signal A : std_logic_vector(3 downto 0) := "0101";
+	signal B : std_logic_vector(3 downto 0) := "1000";
+	signal F : std_logic_vector(2 downto 0) := (others => '1');
+
+	--OUTPUTS
+	signal Y: std_logic_vector(3 downto 0);
+	signal CARRY_SIGN : std_logic;
+
+BEGIN
+
+	uut: ALU4 PORT MAP(
+		A => A,
+		B => B,
+		F => F,
+		Y => Y,
+		CARRY_SIGN => CARRY_SIGN
+		);
+
+	stim_proc_F: process
+	begin
+				F <= F+1;
+				wait for 100 ns;
+	end process;
+
+END;
+

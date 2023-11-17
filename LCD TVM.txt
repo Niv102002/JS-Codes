@@ -1,0 +1,21 @@
+LCD TVM
+
+clk_12Mhz_process :process
+   begin
+		clk_12Mhz <= '0';
+		wait for clk_12Mhz_period/2;
+		clk_12Mhz <= '1';
+		wait for clk_12Mhz_period/2;
+   end process;
+ 
+
+   -- Stimulus process
+   stim_proc: process
+   begin		
+      rst <= '1'; 
+      wait for 20 ns;	
+
+     rst <= '0'; 
+      -- insert stimulus here 
+
+      wait;
