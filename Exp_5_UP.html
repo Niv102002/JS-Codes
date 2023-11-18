@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Count-up Timer</title>
+  <style>
+    #timer {
+      font-size: 24px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="timer">0:00:00</div>
+
+  <script>
+    let seconds = 0;
+    let minutes = 0;
+    let hours = 0;
+    
+    function updateTimer() {
+      seconds++;
+      if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes >= 60) {
+          minutes = 0;
+          hours++;
+        }
+      }
+      
+      const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      document.getElementById('timer').innerHTML = formattedTime;
+    }
+
+    setInterval(updateTimer, 1000); // Update the timer every 1 second (1000 milliseconds)
+  </script>
+</body>
+</html>
